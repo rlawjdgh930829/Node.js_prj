@@ -76,25 +76,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-    let fetchedCar;
-    req.user.getCart()
-        .then(cart => {
-            fetchedCar = cart;
-            return cart.getProducts();
-        })
-        .then(products => {
-            return req.user.createOrder()
-                .then(order => {
-                    return order.addProduct(products.map(product => {
-                        product.orderItem = { quantity: product.cartItem.quantity };
-                        return product;
-                    }));
-                })
-                .catch(err => console.log(err));
-        })
-        .then(result => {
-            return fetchedCar.setProducts(null);
-        })
+    req.user.addOrder()
         .then(result => {
             res.redirect('/orders');
         })
@@ -102,8 +84,9 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-    req.user.getOrders({ include: ['products'] })
+    req.user.getOrders()
         .then(orders => {
+            console.log(orders)
             res.render('shop/orders', {
                 path: '/orders',
                 pageTitle: 'Your Orders',
