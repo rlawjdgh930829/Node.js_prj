@@ -55,7 +55,13 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     const imageUrl = req.body.imageUrl;
-    const product = new Product({ title: title, price: price, description: description, imageUrl: imageUrl });
+    const product = new Product({
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: imageUrl,
+        userId: req.user
+    });
     product.save()
         .then(result => {
             console.log('Create Product');
@@ -68,6 +74,7 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
     Product.find()
+        // .select('title price -_id').populate('userId', 'name')
         .then(products => {
             res.render('admin/products', {
                 prods: products,
