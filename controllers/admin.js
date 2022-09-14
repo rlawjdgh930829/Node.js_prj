@@ -35,8 +35,14 @@ exports.postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     const updatedImageUrl = req.body.imageUrl;
-    const product = new Product(updatedTitle, updatedPrice, updatedDescription, updatedImageUrl, productId);
-    product.save()
+    Product.findById(productId)
+        .then(product => {
+            product.title = updatedTitle;
+            product.price = updatedPrice;
+            product.description = updatedDescription;
+            product.imageUrl = updatedImageUrl;
+            return product.save()
+        })
         .then(result => {
             console.log('Update Product')
             res.redirect('/admin/products');
@@ -47,21 +53,21 @@ exports.postEditProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    const product = new Product(title, price, description, imageUrl, null, req.user._id);
+    const imageUrl = req.body.imageUrl;
+    const product = new Product({ title: title, price: price, description: description, imageUrl: imageUrl });
     product.save()
         .then(result => {
-        console.log('Create Product');
-        res.redirect('/admin/products');
-    })
+            console.log('Create Product');
+            res.redirect('/admin/products');
+        })
         .catch(err => {
             console.log(err);
         });
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
         .then(products => {
             res.render('admin/products', {
                 prods: products,
@@ -74,7 +80,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productId;
-    Product.deleteById(productId)
+    Product.findByIdAndRemove(productId)
         .then(() => {
             console.log('Delete Product');
             res.redirect('/admin/products');
