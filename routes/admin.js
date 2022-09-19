@@ -19,7 +19,7 @@ router.post('/add-product',
     ],
     isAuth, adminController.postAddProduct);
 
-router.get('/edit-product/:productId', isAuth, adminController.getEditAddProduct);
+router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
 router.post('/edit-product',
     [
