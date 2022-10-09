@@ -1,5 +1,5 @@
 .vscode
 node_modules
-.env
+nodemon.json
 images
 data/invoices
