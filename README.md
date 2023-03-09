@@ -1,7 +1,7 @@
 ## 소개
 
 Express.js를 이용하여 만든 프로젝트
-Heroku를 이용하여 배포(https://node-prj.herokuapp.com/)
+~~Heroku를 이용하여 배포(https://node-prj.herokuapp.com/)~~
 
 ## 개발환경
 
